@@ -47,6 +47,7 @@ export default function HomePage(props: HomeProps) {
               className="keen-slider__slide"
               href={`/product/${product.id}`}
               key={product.id}
+              prefetch={false}
             >
               <Image
                 priority
