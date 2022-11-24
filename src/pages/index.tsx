@@ -50,11 +50,11 @@ export default function HomePage(props: HomeProps) {
               prefetch={false}
             >
               <Image
-                priority
                 src={product.imageUrl ?? ""}
                 alt={product.description ?? ""}
                 width={520}
                 height={520}
+                priority
               />
 
               <footer>

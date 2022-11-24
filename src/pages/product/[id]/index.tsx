@@ -11,6 +11,7 @@ import {
   ProductDetails,
 } from "../../../styles/pages/product";
 import "react-loading-skeleton/dist/skeleton.css";
+import { api } from "../../../services/api";
 
 interface Product {
   id: string;
@@ -18,6 +19,7 @@ interface Product {
   imageUrl: string;
   description: string | null;
   price: string;
+  priceId: string;
 }
 interface ProductPageProps {
   product: Product;
@@ -27,6 +29,20 @@ export default function ProductPage(props: ProductPageProps) {
   const { product } = props;
 
   const { isFallback } = useRouter();
+
+  console.log("product => ", product);
+
+  const handleBuyProduct = async () => {
+    try {
+      const response = await api.post("/api/checkout", { priceId: product.priceId });
+
+      const { checkoutUrl } = response.data;
+
+      window.location.href = checkoutUrl;
+    } catch (error) {
+      alert("Falha ao redirecionar para o checkout");
+    }
+  };
 
   if (isFallback) {
     return (
@@ -90,6 +106,7 @@ export default function ProductPage(props: ProductPageProps) {
             width={520}
             height={480}
             alt={String(product.description)}
+            priority
           />
         </ImageContainer>
         <ProductDetails>
@@ -97,7 +114,7 @@ export default function ProductPage(props: ProductPageProps) {
           <span>{product.price}</span>
           <p>{product.description}</p>
 
-          <button>Comprar</button>
+          <button onClick={handleBuyProduct}>Comprar</button>
         </ProductDetails>
       </ProductContainer>
     </>
@@ -135,6 +152,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         description: product.description,
         imageUrl: product.images[0],
         price: normalizePrice,
+        priceId: price.id,
       },
     },
     revalidate: 60 * 60 * 1, // 1 hour
