@@ -30,8 +30,6 @@ export default function ProductPage(props: ProductPageProps) {
 
   const { isFallback } = useRouter();
 
-  console.log("product => ", product);
-
   const handleBuyProduct = async () => {
     try {
       const response = await api.post("/api/checkout", { priceId: product.priceId });
