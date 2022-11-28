@@ -6,6 +6,7 @@ import { Stripe } from "stripe";
 import { stripe } from "../lib/stripe";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
+import { Handbag } from "phosphor-react";
 
 interface Product {
   id: string;
@@ -58,8 +59,13 @@ export default function HomePage(props: HomeProps) {
               />
 
               <footer>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
+                <div>
+                  <strong>{product.name}</strong>
+                  <span>{product.price}</span>
+                </div>
+                <button>
+                  <Handbag size={32} weight="bold" color="#FFFFFF" />
+                </button>
               </footer>
             </Product>
           );
