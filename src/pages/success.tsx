@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,24 +21,39 @@ export default function SuccessPage(props: SuccessPage) {
   const { customerName, product } = props;
 
   return (
-    <SuccessContainer>
-      <h1>Compra efetuada!</h1>
+    <>
+      <Head>
+        <title>Compra efetuada com sucesso!</title>
+      </Head>
 
-      <ImageContainer>
-        <Image src={product.imgUrl} alt="" width={120} height={110} />
-      </ImageContainer>
+      <SuccessContainer>
+        <h1>Compra efetuada!</h1>
 
-      <p>
-        Uhuul, <strong>{customerName}</strong>, sua <strong>{product.name}</strong> já
-        está a caminho da sua casa
-      </p>
+        <ImageContainer>
+          <Image src={product.imgUrl} alt="" width={120} height={110} />
+        </ImageContainer>
 
-      <Link href="/">Voltar ao catálogo</Link>
-    </SuccessContainer>
+        <p>
+          Uhuul, <strong>{customerName}</strong>, sua <strong>{product.name}</strong> já
+          está a caminho da sua casa
+        </p>
+
+        <Link href="/">Voltar ao catálogo</Link>
+      </SuccessContainer>
+    </>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  if (!context.query.session_id) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   const sessionId = String(context.query.session_id);
 
   const session = await stripe.checkout.sessions.retrieve(sessionId, {

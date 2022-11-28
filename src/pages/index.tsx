@@ -38,7 +38,7 @@ export default function HomePage(props: HomeProps) {
   return (
     <>
       <Head>
-        <title>Ignite Shop</title>
+        <title>Home | Ignite Shop</title>
       </Head>
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {

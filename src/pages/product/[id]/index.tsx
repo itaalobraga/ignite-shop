@@ -94,7 +94,7 @@ export default function ProductPage(props: ProductPageProps) {
   return (
     <>
       <Head>
-        <title>{product.name}</title>
+        <title>{product.name} | Ignite Shop</title>
       </Head>
 
       <ProductContainer>
