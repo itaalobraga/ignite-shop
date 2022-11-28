@@ -24,6 +24,8 @@ export default function SuccessPage(props: SuccessPage) {
     <>
       <Head>
         <title>Compra efetuada com sucesso!</title>
+
+        <meta name="robots" content="noindex" />
       </Head>
 
       <SuccessContainer>
