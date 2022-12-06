@@ -112,7 +112,7 @@ export default function ProductPage(props: ProductPageProps) {
           <span>{product.price}</span>
           <p>{product.description}</p>
 
-          <button onClick={handleBuyProduct}>Comprar</button>
+          <button onClick={handleBuyProduct}>Colocar na sacola</button>
         </ProductDetails>
       </ProductContainer>
     </>
