@@ -47,14 +47,28 @@ export const CheckoutContainer = styled("div", {
   boxShadow: "-4px 0px 30px rgba(0, 0, 0, 0.8)",
   backgroundColor: "$gray800",
 
-  maxWidth: "30rem",
-  width: "100%",
+  width: 0,
   height: "100vh",
 
   position: "absolute",
   right: 0,
 
-  padding: "1.75rem",
+  visibility: "hidden",
+  overflow: "hidden",
+
+  padding: 0,
+
+  transition: "250ms ease-in-out",
+
+  "&.opened": {
+    width: "30rem",
+    padding: "1.75rem",
+    visibility: "visible",
+
+    "& button:first-child": {
+      display: "block",
+    },
+  },
 
   "& button:first-child": {
     backgroundColor: "transparent",
@@ -62,16 +76,23 @@ export const CheckoutContainer = styled("div", {
     fontSize: 0,
     cursor: "pointer",
 
-    display: "block",
+    display: "none",
 
     margin: "0 0 1.75rem auto",
   },
 });
 
 export const CheckoutContent = styled("div", {
-  display: "flex",
+  display: "none",
   flexDirection: "column",
   gap: "2rem",
+  height: "calc(100% - 3rem)",
+
+  minWidth: "24rem",
+
+  "&.opened": {
+    display: "flex",
+  },
 
   h1: {
     fontSize: "$lg",
@@ -85,6 +106,62 @@ export const CheckoutContent = styled("div", {
     display: "flex",
     flexDirection: "column",
     gap: "1.5rem",
+  },
+
+  "& div.summary": {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1.5rem",
+    marginTop: "auto",
+
+    "& > div": {
+      display: "flex",
+      justifyContent: "space-between",
+
+      "& .summary-quantity": {
+        fontSize: "1rem",
+        fontWeight: "400",
+        lineHeight: "160%",
+
+        color: "$gray100",
+      },
+      "& .summary-products-amount": {
+        fontSize: "$md",
+        fontWeight: "400",
+        lineHeight: "160%",
+
+        color: "$gray300",
+      },
+      "& .summary-total": {
+        fontSize: "$md",
+        fontWeight: "700",
+        lineHeight: "160%",
+
+        color: "$gray100",
+      },
+      "& .summary-price": {
+        fontSize: "$xl",
+        fontWeight: "700",
+        lineHeight: "140%",
+
+        color: "$gray100",
+      },
+    },
+
+    "& > button": {
+      backgroundColor: "$green500",
+      border: 0,
+      color: "white",
+      borderRadius: 8,
+      padding: "1.25rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      fontSize: "$md",
+
+      "&:hover": {
+        backgroundColor: "$green300",
+      },
+    },
   },
 });
 
@@ -124,6 +201,10 @@ export const Product = styled("div", {
       cursor: "pointer",
 
       lineHeight: "160%",
+
+      "&:hover": {
+        color: "$green300",
+      },
     },
   },
 });
