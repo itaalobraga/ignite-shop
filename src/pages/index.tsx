@@ -7,13 +7,14 @@ import { stripe } from "../lib/stripe";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
 import { Handbag } from "phosphor-react";
+import { formatPrice } from "../utils/formatPrice";
 
 interface Product {
   id: string;
   name: string;
   imageUrl: string;
   description: string | null;
-  price: string;
+  price: number;
 }
 
 interface HomeProps {
@@ -61,7 +62,7 @@ export default function HomePage(props: HomeProps) {
               <footer>
                 <div>
                   <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <span>{formatPrice(product.price)}</span>
                 </div>
                 <button>
                   <Handbag size={32} weight="bold" color="#FFFFFF" />
@@ -83,17 +84,12 @@ export const getStaticProps: GetStaticProps = async () => {
   const products: Product[] = response.data.map((product) => {
     const price = product.default_price as Stripe.Price;
 
-    const normalizePrice = new Intl.NumberFormat("pt-BR", {
-      currency: "BRL",
-      style: "currency",
-    }).format(price.unit_amount! / 100);
-
     return {
       id: product.id,
       name: product.name,
       description: product.description,
       imageUrl: product.images[0],
-      price: normalizePrice,
+      price: price.unit_amount! / 100,
     };
   });
 

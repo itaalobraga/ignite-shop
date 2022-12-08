@@ -9,10 +9,13 @@ export interface Product {
   name: string;
   imageUrl: string;
   description: string | null;
-  price: string;
+  price: number;
 }
 
 export interface CheckoutContext {
   cart: Product[];
+  totalProducts: number;
+  totalPrice: string;
   handleAddProductToCart: (product: Product) => void;
+  handleRemoveProduct: (productId: string) => void;
 }

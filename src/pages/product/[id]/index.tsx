@@ -13,6 +13,7 @@ import {
 import "react-loading-skeleton/dist/skeleton.css";
 import { api } from "../../../services/api";
 import { useCheckout } from "../../../contexts/Checkout";
+import { formatPrice } from "../../../utils/formatPrice";
 
 interface Product {
   id: string;
@@ -112,7 +113,7 @@ export default function ProductPage(props: ProductPageProps) {
         </ImageContainer>
         <ProductDetails>
           <h1>{product.name}</h1>
-          <span>{product.price}</span>
+          <span>{formatPrice(product.price)}</span>
           <p>{product.description}</p>
 
           <button onClick={() => handleAddProductToCart(product)}>Colocar na sacola</button>
@@ -140,11 +141,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const price = product.default_price as Stripe.Price;
 
-  const normalizePrice = new Intl.NumberFormat("pt-BR", {
-    currency: "BRL",
-    style: "currency",
-  }).format(price.unit_amount! / 100);
-
   return {
     props: {
       product: {
@@ -152,7 +148,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         name: product.name,
         description: product.description,
         imageUrl: product.images[0],
-        price: normalizePrice,
+        price: price.unit_amount! / 100,
         priceId: price.id,
       },
     },
