@@ -20,7 +20,7 @@ interface Product {
   name: string;
   imageUrl: string;
   description: string | null;
-  price: string;
+  price: number;
   priceId: string;
 }
 interface ProductPageProps {

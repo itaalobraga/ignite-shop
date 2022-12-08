@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { stripe } from "../../lib/stripe";
 
 export default async function handleCheckout(req: NextApiRequest, res: NextApiResponse) {
-  const { priceId } = req.body;
+  const { priceId, products } = req.body;
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });

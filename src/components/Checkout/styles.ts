@@ -47,6 +47,15 @@ export const CheckoutContent = styled("div", {
 
   minWidth: "24rem",
 
+  "& .empty-bag": {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+
+    height: "36rem",
+    width: "100%",
+  },
+
   "&.opened": {
     display: "flex",
   },

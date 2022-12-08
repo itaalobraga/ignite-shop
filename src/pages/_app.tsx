@@ -14,6 +14,8 @@ globalStyles();
 export default function App({ Component, pageProps }: AppProps) {
   const { totalProducts } = useCheckout();
 
+  console.log("totalProducts => ", totalProducts);
+
   const [isOpen, setIsOpen] = useState(false);
 
   function handleCheckout() {

@@ -2,7 +2,7 @@ import { CheckoutContainer, CheckoutContent, ImageContainer, Product } from "./s
 import Image from "next/image";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { useCheckout } from "../../contexts/Checkout";
-import { X } from "phosphor-react";
+import { Handbag, X } from "phosphor-react";
 import { formatPrice } from "../../utils/formatPrice";
 
 interface CheckoutProps extends HTMLAttributes<HTMLDivElement> {
@@ -23,6 +23,12 @@ export function Checkout(props: CheckoutProps) {
       <CheckoutContent className={isOpen ? "opened" : ""}>
         <h1>Sacola de compras</h1>
         <div className="product-wrapper">
+          {!totalProducts && (
+            <div className="empty-bag">
+              <Handbag size={94} weight="bold" color="#c4c4cc" />
+            </div>
+          )}
+
           {cart.map((product) => {
             return (
               <Product key={product.id}>
