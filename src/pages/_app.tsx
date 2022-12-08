@@ -13,12 +13,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Handbag, X } from "phosphor-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CheckoutContext, CheckoutProvider, useCheckout } from "../contexts/Checkout";
 
 globalStyles();
 
 export default function App({ Component, pageProps }: AppProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { cart } = useCheckout();
 
   const handleCheckoutContainer = () => {
     setIsOpen((state) => !state);
@@ -34,7 +37,9 @@ export default function App({ Component, pageProps }: AppProps) {
           <Handbag size={32} weight="bold" color="#8D8D99" />
         </CheckoutButton>
       </Header>
-      <Component {...pageProps} />
+      <CheckoutProvider>
+        <Component {...pageProps} />
+      </CheckoutProvider>
       <CheckoutContainer className={isOpen ? "opened" : ""}>
         <button onClick={handleCheckoutContainer}>
           <X size={24} weight="bold" color="#8D8D99" />
@@ -42,35 +47,31 @@ export default function App({ Component, pageProps }: AppProps) {
         <CheckoutContent className={isOpen ? "opened" : ""}>
           <h1>Sacola de compras</h1>
           <div className="product-wrapper">
-            <Product>
-              <ImageContainer></ImageContainer>
-              <div>
-                <span>Camiseta Beyond the Limits</span>
-                <strong>R$ 79,90</strong>
-                <button>Remover</button>
-              </div>
-            </Product>
-            <Product>
-              <ImageContainer></ImageContainer>
-              <div>
-                <span>Camiseta Beyond the Limits</span>
-                <strong>R$ 79,90</strong>
-                <button>Remover</button>
-              </div>
-            </Product>
-            <Product>
-              <ImageContainer></ImageContainer>
-              <div>
-                <span>Camiseta Beyond the Limits</span>
-                <strong>R$ 79,90</strong>
-                <button>Remover</button>
-              </div>
-            </Product>
+            {cart?.map((product) => {
+              return (
+                <Product key={product.id}>
+                  <ImageContainer>
+                    <Image
+                      src={product.imageUrl}
+                      width={94}
+                      height={94}
+                      alt={String(product.description)}
+                      priority
+                    />
+                  </ImageContainer>
+                  <div>
+                    <span>{product.name}</span>
+                    <strong>{product.price}</strong>
+                    <button>Remover</button>
+                  </div>
+                </Product>
+              );
+            })}
           </div>
           <div className="summary">
             <div>
               <span className="summary-quantity">Quantidade</span>
-              <span className="summary-products-amount">3 itens</span>
+              <span className="summary-products-amount">{cart.length} itens</span>
             </div>
             <div>
               <span className="summary-total">Valor total</span>

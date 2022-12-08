@@ -12,6 +12,7 @@ import {
 } from "../../../styles/pages/product";
 import "react-loading-skeleton/dist/skeleton.css";
 import { api } from "../../../services/api";
+import { useCheckout } from "../../../contexts/Checkout";
 
 interface Product {
   id: string;
@@ -29,6 +30,8 @@ export default function ProductPage(props: ProductPageProps) {
   const { product } = props;
 
   const { isFallback } = useRouter();
+
+  const { handleAddProductToCart } = useCheckout();
 
   const handleBuyProduct = async () => {
     try {
@@ -112,7 +115,7 @@ export default function ProductPage(props: ProductPageProps) {
           <span>{product.price}</span>
           <p>{product.description}</p>
 
-          <button onClick={handleBuyProduct}>Colocar na sacola</button>
+          <button onClick={() => handleAddProductToCart(product)}>Colocar na sacola</button>
         </ProductDetails>
       </ProductContainer>
     </>
