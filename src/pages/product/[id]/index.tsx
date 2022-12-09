@@ -34,18 +34,6 @@ export default function ProductPage(props: ProductPageProps) {
 
   const { handleAddProductToCart } = useCheckout();
 
-  const handleBuyProduct = async () => {
-    try {
-      const response = await api.post("/api/checkout", { priceId: product.priceId });
-
-      const { checkoutUrl } = response.data;
-
-      window.location.href = checkoutUrl;
-    } catch (error) {
-      alert("Falha ao redirecionar para o checkout");
-    }
-  };
-
   if (isFallback) {
     return (
       <>

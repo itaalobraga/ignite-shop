@@ -4,6 +4,7 @@ import { HTMLAttributes, useEffect, useState } from "react";
 import { useCheckout } from "../../contexts/Checkout";
 import { Handbag, X } from "phosphor-react";
 import { formatPrice } from "../../utils/formatPrice";
+import { api } from "../../services/api";
 
 interface CheckoutProps extends HTMLAttributes<HTMLDivElement> {
   handleCheckout: () => void;
@@ -14,6 +15,22 @@ export function Checkout(props: CheckoutProps) {
   const { isOpen, handleCheckout } = props;
 
   const { cart, totalProducts, totalPrice, handleRemoveProduct } = useCheckout();
+
+  const products = cart.map((product) => {
+    return { price: product.priceId, quantity: 1 };
+  });
+
+  async function handleBuyProducts() {
+    try {
+      const response = await api.post("/api/checkout", { products });
+
+      const { checkoutUrl } = response.data;
+
+      window.location.href = checkoutUrl;
+    } catch (error) {
+      alert("Falha ao redirecionar para o checkout");
+    }
+  }
 
   return (
     <CheckoutContainer className={isOpen ? "opened" : ""}>
@@ -59,7 +76,7 @@ export function Checkout(props: CheckoutProps) {
             <span className="summary-total">Valor total</span>
             <span className="summary-price">{totalPrice}</span>
           </div>
-          <button>Finalizar compra</button>
+          <button onClick={handleBuyProducts}>Finalizar compra</button>
         </div>
       </CheckoutContent>
     </CheckoutContainer>

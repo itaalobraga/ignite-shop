@@ -10,6 +10,7 @@ export interface Product {
   imageUrl: string;
   description: string | null;
   price: number;
+  priceId: string;
 }
 
 export interface CheckoutContext {
