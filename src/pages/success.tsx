@@ -14,11 +14,11 @@ interface Product {
 
 interface SuccessPage {
   customerName: string;
-  product: Product;
+  products: Product[];
 }
 
 export default function SuccessPage(props: SuccessPage) {
-  const { customerName, product } = props;
+  const { customerName, products } = props;
 
   return (
     <>
@@ -29,15 +29,21 @@ export default function SuccessPage(props: SuccessPage) {
       </Head>
 
       <SuccessContainer>
+        <div>
+          {products.map((product) => {
+            return (
+              <ImageContainer key={product.name}>
+                <Image src={product.imgUrl} alt="" width={120} height={110} priority />
+              </ImageContainer>
+            );
+          })}
+        </div>
+
         <h1>Compra efetuada!</h1>
 
-        <ImageContainer>
-          <Image src={product.imgUrl} alt="" width={120} height={110} />
-        </ImageContainer>
-
         <p>
-          Uhuul, <strong>{customerName}</strong>, sua <strong>{product.name}</strong> já
-          está a caminho da sua casa
+          Uhuul <strong>{customerName}</strong>, sua compra de {products.length} camisetas
+          já está a caminho da sua casa
         </p>
 
         <Link href="/">Voltar ao catálogo</Link>
@@ -59,20 +65,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const sessionId = String(context.query.session_id);
 
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
-    expand: ["line_items", "line_items.data.price.product"],
+    expand: ["line_items.data", "line_items.data.price.product"],
   });
 
   const customerName = session.customer_details?.name;
 
-  const product = session.line_items?.data[0].price?.product as Stripe.Product;
+  const products = session.line_items?.data as Stripe.LineItem[];
+
+  const normalizedProducts = products.map((diversifiedProduct) => {
+    const { product: defaultProduct } = diversifiedProduct.price as Stripe.Price;
+
+    const product = defaultProduct as Stripe.Product;
+
+    return {
+      name: product.name,
+      imgUrl: product.images[0],
+    };
+  });
 
   return {
     props: {
       customerName,
-      product: {
-        name: product.name,
-        imgUrl: product.images[0],
-      },
+      products: normalizedProducts,
     },
   };
 };
